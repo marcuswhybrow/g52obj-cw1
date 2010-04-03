@@ -38,8 +38,8 @@ public class Game
 
 		// Should really be done external to the game.
 		// Players join the game in clockwise fashion.
-		this.addPlayer(new HumanPlayer());
-		this.addPlayer(new ComputerPlayer());
+		this.addPlayer(new HumanPlayer("Marcus"));
+		this.addPlayer(new HumanPlayer("Chris"));
 
 		if(_numPlayers < 2)
 		{

@@ -16,7 +16,12 @@ public class ComputerPlayer extends Player
 
 	public ComputerPlayer()
 	{
-		super();
+		super("Computer");
+	}
+
+	public ComputerPlayer(String name)
+	{
+		super(name);
 	}
 
 	public ComputerPlayer(Deck deck)
@@ -33,10 +38,5 @@ public class ComputerPlayer extends Player
 		_nextCard.printCard();
 
 		return (String) _nextCard.getProperty(1).getKey();
-	}
-
-	public String toString()
-	{
-		return "Computer";
 	}
 }

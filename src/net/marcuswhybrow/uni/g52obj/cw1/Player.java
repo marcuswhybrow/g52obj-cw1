@@ -10,12 +10,16 @@ public abstract class Player
 	/** The player's personal deck of cards */
 	protected Deck _deck;
 
+	private String _name;
+
 	/**
-	 * Crates a player with an empty deck
+	 * Crates a player with an empty deck and the given name.
+	 * @param name The name for the new player
 	 */
-	public Player()
+	public Player(String name)
 	{
 		_deck = new Deck();
+		_name = name;
 	}
 
 	/**
@@ -32,4 +36,9 @@ public abstract class Player
 	 * @return The property the player has chosen.
 	 */
 	public abstract String takeTurn();
+
+	public String toString()
+	{
+		return _name;
+	}
 }

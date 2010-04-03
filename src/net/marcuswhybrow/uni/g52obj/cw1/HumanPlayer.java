@@ -17,12 +17,12 @@ public class HumanPlayer extends Player
 
 	public HumanPlayer()
 	{
-		super();
+		super("Human");
 	}
 
-	public HumanPlayer(Deck deck)
-	{ 
-		super(deck);
+	public HumanPlayer(String name)
+	{
+		super(name);
 	}
 
 	public String takeTurn()
@@ -66,10 +66,5 @@ public class HumanPlayer extends Player
 				System.err.println("There was an IO error: " + ex);
 			}
 		}
-	}
-
-	public String toString()
-	{
-		return "Human";
 	}
 }
