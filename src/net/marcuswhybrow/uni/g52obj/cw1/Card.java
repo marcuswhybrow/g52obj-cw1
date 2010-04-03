@@ -4,6 +4,7 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  *
@@ -25,6 +26,11 @@ public class Card
 	{
 		_properties.put(key, value);
 		_numProperties ++;
+	}
+
+	public Set getProperties()
+	{
+		return _properties.entrySet();
 	}
 
 	public Map.Entry getProperty(int id)

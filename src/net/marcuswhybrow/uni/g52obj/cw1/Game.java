@@ -38,8 +38,8 @@ public class Game
 
 		// Should really be done external to the game.
 		// Players join the game in clockwise fashion.
-		this.addPlayer(new HumanPlayer("Marcus"));
-		this.addPlayer(new HumanPlayer("Chris"));
+		this.addPlayer(new ComputerPlayer());
+		this.addPlayer(new HumanPlayer());
 
 		if(_numPlayers < 2)
 		{
@@ -51,9 +51,7 @@ public class Game
 			while(!_deck.isEmpty())
 			{
 				for(int i = 0; i < _numPlayers; i++)
-				{
 					_players.get(i)._deck.addCardToDeckTop(this._deck.takeCardFromTop());
-				}
 			}
 
 			// Set the current player as the first player
