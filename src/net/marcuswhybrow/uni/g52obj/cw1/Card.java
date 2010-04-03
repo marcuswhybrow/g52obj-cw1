@@ -29,18 +29,14 @@ public class Card
 
 	public Map.Entry getProperty(int id)
 	{
-		Iterator properties = _properties.entrySet().iterator();
-		Map.Entry entry = null;
-
-		for(; id > 0 && properties.hasNext(); id--)
+		try
 		{
-			if(id == 1)
-			{
-				entry = (Map.Entry) properties.next();
-			}
+			return (Map.Entry) _properties.entrySet().toArray()[id-1];
 		}
-
-		return entry;
+		catch(IndexOutOfBoundsException ex)
+		{
+			return null;
+		}
 	}
 
 	public int getPropertyValue(String key)

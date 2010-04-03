@@ -1,8 +1,9 @@
 
 package net.marcuswhybrow.uni.g52obj.cw1;
 
-import java.util.Scanner;
-import java.util.InputMismatchException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -12,25 +13,22 @@ public class HumanPlayer extends Player
 {
 	/** The top card in the players deck */
 	private Card _nextCard;
-	/** Input from the human player */
-	private	Scanner in;
 
 	public HumanPlayer()
 	{
 		super();
-		in = new Scanner(System.in);
 	}
 
 	public HumanPlayer(Deck deck)
 	{ 
 		super(deck);
-		in = new Scanner(System.in);
 	}
 
 	public String takeTurn()
 	{
-		int choice;
-		String property;
+		int choice = 0;
+		String property, line = null;
+		BufferedReader in;
 
 		_nextCard = _deck.lookAtTopCard();
 
@@ -42,23 +40,30 @@ public class HumanPlayer extends Player
 
 			try
 			{
-				choice = in.nextInt();
+				in = new BufferedReader(new InputStreamReader(System.in));
+				line = in.readLine();
+				choice = Integer.parseInt(line);
 			}
-			catch(InputMismatchException ex)
+			catch(NumberFormatException ex)
 			{
-				System.out.println("Thats not even a number!");
-				continue;
+				System.err.println("This is not a valid number: " + line);
 			}
+			catch(IOException ex)
+			{
+				System.err.println("There was an IO error: " + ex);
+			}
+			finally
+			{
+				property = (String) _nextCard.getProperty(choice).getKey();
 
-			property = (String) _nextCard.getProperty(choice).getKey();
-
-			if(property != null)
-			{
-				return property;
-			}
-			else
-			{
-				System.out.println("That number is not an option!");
+				if(property != null)
+				{
+					return property;
+				}
+				else
+				{
+					System.out.println("That number is not an option!");
+				}
 			}
 		}
 	}
