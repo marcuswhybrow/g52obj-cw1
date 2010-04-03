@@ -80,9 +80,13 @@ public class Game
 				// Clear the cards in play to start a new round
 				_cardsInPlay.clear();
 
+				System.out.println(">> " + _currentPlayer + " is taking their go.");
+
 				// The leading player takes their turn (choosing a property)
 				property = _currentPlayer.takeTurn();
 				allPlayers = _players.iterator();
+
+				System.out.println(">> " + _currentPlayer + " chose " + property);
 
 				// Evaluate all players cards, winning or drawing cards end up
 				// "cards in play" and losing cards end up in the shared deck.
@@ -91,9 +95,12 @@ public class Game
 					player = (Player) allPlayers.next();
 					playersCard = player._deck.takeCardFromTop();
 
+					System.out.println(">> " + player + "'s card '" + playersCard + "' has " + playersCard.getPropertyValue(property) + " for " + property);
+
 					if(_cardsInPlay.size() == 0)
 					{
 						_cardsInPlay.put(player, playersCard);
+						System.out.println(">> " + player + "'s card is currenty the best card");
 					}
 					else
 					{
@@ -104,18 +111,25 @@ public class Game
 							case -1:
 								// Player's card is worse than current best
 								_deck.addCardToDeckTop(playersCard);
+								System.out.println(">> " + player + "'s card has been added to the shared deck");
 								break;
 							case 1:
 								// Players card is better than current best
+								_deck.addCardsToDeckTop(_cardsInPlay.values());
 								_cardsInPlay.clear();
+								_cardsInPlay.put(player, playersCard);
+								System.out.println(">> " + player + "'s card is currenty the best card");
+								break;
 							case 0:
 								// Players card is the same as current best
 								_cardsInPlay.put(player, playersCard);
+								System.out.println(">> " + player + "'s card is as good as the current best");
 								break;
 						}
 					}
-					_cardsInPlay.put(player, player._deck.takeCardFromTop());
 				}
+
+				System.out.println(">> " + "There is " + _cardsInPlay.size() + " card(s) in play");
 
 				// Determine if the round was won or drawn
 				switch(_cardsInPlay.size())
@@ -134,7 +148,7 @@ public class Game
 								+ " in category " + property);
 
 						// Winner takes all cards
-						this.takeCards(_currentPlayer);
+						this.takeAllCards(_currentPlayer);
 
 						this.printDecks();
 						this.askPlayersToLeave();
@@ -142,6 +156,7 @@ public class Game
 					default:
 						// Multiple cards drew, the same player has another turn.
 						System.out.println("Players have drawn on " + property + ", playing next card.");
+						_deck.addCardsToDeckTop(_cardsInPlay.values());
 						this.printDecks();
 						this.askPlayersToLeave();
 						continue;
@@ -152,7 +167,7 @@ public class Game
 			System.out.println(_players.get(0) + " has won this round with card "
 					+ winningCard + " which scored "
 					+ winningCard.getPropertyValue(property)
-					+ "in category" + property + ".");
+					+ "in " + property + ".");
 		}
 		else
 		{
@@ -160,7 +175,7 @@ public class Game
 		}
 	}
 
-	private void takeCards(Player player)
+	private void takeAllCards(Player player)
 	{
 		player._deck.addCardsToDeckBottom(_cardsInPlay.values());
 		player._deck.addCardsToDeckBottom(_deck.takeAllCards());
@@ -219,7 +234,7 @@ public class Game
 
 			if(player._deck.isEmpty())
 			{
-				_players.remove(player);
+				this.removePlayer(player);
 			}
 		}
 	}

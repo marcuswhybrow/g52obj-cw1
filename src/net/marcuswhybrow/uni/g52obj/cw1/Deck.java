@@ -3,6 +3,7 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.LinkedList;
 import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  *
@@ -47,6 +48,11 @@ public class Deck
 		}
 	}
 
+	public void addCardsToDeckTop(Collection c)
+	{
+		_cards.addAll(0, c);
+	}
+
 	public void addCardsToDeckBottom(Collection c)
 	{
 		_cards.addAll(c);
@@ -57,9 +63,11 @@ public class Deck
 		_cards.addAll(_cards);
 	}
 
-	public Card[] takeAllCards()
+	public ArrayList<Card> takeAllCards()
 	{
-		return (Card[]) _cards.toArray();
+		ArrayList cards = new ArrayList<Card>(_cards);
+		_cards.clear();
+		return cards;
 	}
 
 	/**
