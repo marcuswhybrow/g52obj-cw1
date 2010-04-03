@@ -1,10 +1,9 @@
 
 package net.marcuswhybrow.uni.g52obj.cw1;
 
-import java.util.HashMap;
-import java.util.Set;
-import java.util.ArrayList;
 import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -13,25 +12,40 @@ import java.util.Map;
 public class Card
 {
 	private String _title;
-	private ArrayList<Property> _properties;
+	private LinkedHashMap<String, Integer> _properties;
+	private int _numProperties;
 
 	public Card(String title)
 	{
 		_title = title;
-		_properties = new ArrayList<Property>();
+		_properties = new LinkedHashMap<String, Integer>();
 	}
 
 	public void addProperty(String key, int value)
 	{
-		_properties.add(new Property(key, value));
+		_properties.put(key, value);
+		_numProperties ++;
 	}
 
-	public Property getPropertyById(int id)
+	public Map.Entry getProperty(int id)
 	{
-		if(id > 0 && id <= _properties.size())
-			return _properties.get(id-1);
-		else
-			return null;
+		Iterator properties = _properties.entrySet().iterator();
+		Map.Entry entry = null;
+
+		for(; id > 0 && properties.hasNext(); id--)
+		{
+			if(id == 1)
+			{
+				entry = (Map.Entry) properties.next();
+			}
+		}
+
+		return entry;
+	}
+
+	public int getPropertyValue(String key)
+	{
+		return _properties.get(key);
 	}
 
 	public String toString()
@@ -41,14 +55,29 @@ public class Card
 
 	public void printCard()
 	{
-		int numProperties = _properties.size();
+		Iterator properties = _properties.entrySet().iterator();
+		int choiceNumber = 1;
+		Map.Entry entry;
 
 		System.out.println("Top Card is " + _title + ":\n");
 		System.out.println("Categories:");
 
-		for(int i = 1; i <= numProperties; i++)
+		while(properties.hasNext())
 		{
-			System.out.println(i + ". " + _properties.get(i-1).getName() + ": " + _properties.get(i-1).getValue());
+			entry = (Map.Entry) properties.next();
+			System.out.println(choiceNumber + ". " + entry.getKey() + ": " + entry.getValue());
+			choiceNumber++;
 		}
+	}
+
+	public int compareTo(Card otherCard, String property)
+	{
+		int thisValue, otherValue;
+		thisValue = this.getPropertyValue(property);
+		otherValue = otherCard.getPropertyValue(property);
+
+		if(thisValue < otherValue) return -1;
+		else if(thisValue == otherValue) return 0;
+		else return 1;
 	}
 }

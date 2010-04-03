@@ -24,15 +24,15 @@ public class ComputerPlayer extends Player
 		super(deck);
 	}
 
-	public Property takeTurn()
+	public String takeTurn()
 	{
-		Property property;
+		String property;
 		
 		_nextCard = _deck.lookAtTopCard();
 		
 		_nextCard.printCard();
 
-		return _nextCard.getPropertyById(1);
+		return (String) _nextCard.getProperty(1).getKey();
 	}
 
 	public String toString()

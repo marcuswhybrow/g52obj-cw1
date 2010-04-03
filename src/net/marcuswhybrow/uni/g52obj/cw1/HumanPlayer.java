@@ -2,6 +2,7 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 /**
  *
@@ -26,10 +27,10 @@ public class HumanPlayer extends Player
 		in = new Scanner(System.in);
 	}
 
-	public Property takeTurn()
+	public String takeTurn()
 	{
 		int choice;
-		Property property;
+		String property;
 
 		_nextCard = _deck.lookAtTopCard();
 
@@ -38,9 +39,18 @@ public class HumanPlayer extends Player
 		while(true)
 		{
 			System.out.print("Please select a category to compete with: ");
-			choice = in.nextInt();
 
-			property = _nextCard.getPropertyById(choice);
+			try
+			{
+				choice = in.nextInt();
+			}
+			catch(InputMismatchException ex)
+			{
+				System.out.println("Thats not even a number!");
+				continue;
+			}
+
+			property = (String) _nextCard.getProperty(choice).getKey();
 
 			if(property != null)
 			{

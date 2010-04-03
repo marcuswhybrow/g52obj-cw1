@@ -2,6 +2,7 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.LinkedList;
+import java.util.Collection;
 
 /**
  *
@@ -26,8 +27,11 @@ public class Deck
 	 */
 	public void addCardToDeckTop(Card card)
 	{
-		_cards.addFirst(card);
-		_sizeOfDeck++;
+		if(card != null)
+		{
+			_cards.addFirst(card);
+			_sizeOfDeck++;
+		}
 	}
 
 	/**
@@ -36,8 +40,26 @@ public class Deck
 	 */
 	public void addCardToDeckBottom(Card card)
 	{
-		_cards.addLast(card);
-		_sizeOfDeck++;
+		if(card != null)
+		{
+			_cards.addLast(card);
+			_sizeOfDeck++;
+		}
+	}
+
+	public void addCardsToDeckBottom(Collection c)
+	{
+		_cards.addAll(c);
+	}
+
+	public void addCardsToDeckBottom(Card[] cards)
+	{
+		_cards.addAll(_cards);
+	}
+
+	public Card[] takeAllCards()
+	{
+		return (Card[]) _cards.toArray();
 	}
 
 	/**
@@ -46,8 +68,11 @@ public class Deck
 	 */
 	public void addCardToDeckRandomly(Card card)
 	{
-		_cards.add((int) Math.round((_cards.size() * Math.random())), card);
-		_sizeOfDeck++;
+		if(card != null)
+		{
+			_cards.add((int) Math.round((_cards.size() * Math.random())), card);
+			_sizeOfDeck++;
+		}
 	}
 
 	/**
@@ -136,5 +161,10 @@ public class Deck
 	public boolean isEmpty()
 	{
 		return _cards.isEmpty();
+	}
+
+	public String toString()
+	{
+		return _cards.toString();
 	}
 }

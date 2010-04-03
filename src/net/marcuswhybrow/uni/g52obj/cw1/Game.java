@@ -3,6 +3,8 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -13,48 +15,144 @@ public class Game
 	/** The deck of cards owned by no player */
 	private Deck _deck;
 
-	private final boolean HUMAN_GOES_FIRST = true;
+	/** The cards in contest to win the round, eventually contains one card if
+	 * there is a winner, more than one card if there is a draw */
+	private HashMap<Player, Card> _cardsInPlay;
 
-	/** The human player */
-	private Player _playerOne;
-	/** The computer player */
-	private Player _playerTwo;
+	private final boolean HUMAN_GOES_FIRST = true;
 
 	/** The plyaers in the game */
 	private ArrayList<Player> _players = new ArrayList<Player>();
+	/** The player whose turn it currently is */
+	private Player _currentPlayer;
+	/** The number of players in the game */
+	private int _numPlayers;
 
 	private String _propertyName;
 	private int _propertyValue;
 
 	public Game(Deck deck)
 	{
-		int numPlayers;
-
 		_deck = deck;
+		_cardsInPlay = new HashMap<Player, Card>();
 
-		_players.add(new HumanPlayer());
-		_players.add(new ComputerPlayer());
+		// Should really be done external to the game.
+		// Players join the game in clockwise fashion.
+		this.addPlayer(new HumanPlayer());
+		this.addPlayer(new ComputerPlayer());
 
-		numPlayers = _players.size();
-
-		while(!_deck.isEmpty())
+		if(_numPlayers < 2)
 		{
-			for(int i = 0; i < numPlayers; i++)
+			System.err.println("A game must have at least 2 players");
+		}
+		else
+		{
+			// Deal cards to all players in a clockwise fashion
+			while(!_deck.isEmpty())
 			{
-				_players.get(i)._deck.addCardToDeckTop(this._deck.takeCardFromTop());
+				for(int i = 0; i < _numPlayers; i++)
+				{
+					_players.get(i)._deck.addCardToDeckTop(this._deck.takeCardFromTop());
+				}
 			}
+
+			// Set the current player as the first player
+			_currentPlayer = _players.get(0);
 		}
 	}
 
 	public void playGame()
 	{
-		if(!_playerOne._deck.isEmpty() && !_playerTwo._deck.isEmpty())
+		String property = null;
+		Iterator allPlayers;
+		Player player;
+		Card playersCard, currentBestCard, winningCard = null;
+		Map.Entry winningHand;
+
+		if(playersHaveCards())
 		{
-			while(true)
+			while(_numPlayers > 1)
 			{
-				if(takeTurn(_playerOne, _playerTwo))
-				takeTurn(_playerTwo, _playerOne);
+				System.out.println("\n============================================");
+				System.out.println("NEW ROUND");
+				System.out.println("============================================\n");
+
+				// Clear the cards in play to start a new round
+				_cardsInPlay.clear();
+
+				// The leading player takes their turn (choosing a property)
+				property = _currentPlayer.takeTurn();
+				allPlayers = _players.iterator();
+
+				// Evaluate all players cards, winning or drawing cards end up
+				// "cards in play" and losing cards end up in the shared deck.
+				while(allPlayers.hasNext())
+				{
+					player = (Player) allPlayers.next();
+					playersCard = player._deck.takeCardFromTop();
+
+					if(_cardsInPlay.size() == 0)
+					{
+						_cardsInPlay.put(player, playersCard);
+					}
+					else
+					{
+						currentBestCard = (Card) _cardsInPlay.values().toArray()[0];
+
+						switch(playersCard.compareTo(currentBestCard, property))
+						{
+							case -1:
+								// Player's card is worse than current best
+								_deck.addCardToDeckTop(playersCard);
+								break;
+							case 1:
+								// Players card is better than current best
+								_cardsInPlay.clear();
+							case 0:
+								// Players card is the same as current best
+								_cardsInPlay.put(player, playersCard);
+								break;
+						}
+					}
+					_cardsInPlay.put(player, player._deck.takeCardFromTop());
+				}
+
+				// Determine if the round was won or drawn
+				switch(_cardsInPlay.size())
+				{
+					case 0:
+						System.err.println("No cards won the round, this is strange.");
+						break;
+					case 1:
+						// A single card beat all others
+						winningHand = (Map.Entry) _cardsInPlay.entrySet().toArray()[0];
+						_currentPlayer = (Player) winningHand.getKey();
+						winningCard = (Card) winningHand.getValue();
+						System.out.println(_currentPlayer + " has won this round with card " 
+								+ winningCard + " which scored "
+								+ winningCard.getPropertyValue(property)
+								+ " in category " + property);
+
+						// Winner takes all cards
+						this.takeCards(_currentPlayer);
+
+						this.printDecks();
+						this.askPlayersToLeave();
+						continue;
+					default:
+						// Multiple cards drew, the same player has another turn.
+						System.out.println("Players have drawn on " + property + ", playing next card.");
+						this.printDecks();
+						this.askPlayersToLeave();
+						continue;
+				}
 			}
+
+			// One one player is left
+			System.out.println(_players.get(0) + " has won this round with card "
+					+ winningCard + " which scored "
+					+ winningCard.getPropertyValue(property)
+					+ "in category" + property + ".");
 		}
 		else
 		{
@@ -62,84 +160,79 @@ public class Game
 		}
 	}
 
-	private boolean takeTurn(Player playerOne, Player playerTwo)
+	private void takeCards(Player player)
 	{
-		Property playerOneProperty, playerTwoProperty;
-		Card playerOneCard, playerTwoCard;
-		int playerOneValue, playerTwoValue;
+		player._deck.addCardsToDeckBottom(_cardsInPlay.values());
+		player._deck.addCardsToDeckBottom(_deck.takeAllCards());
 
-		// Player one picks a property
-		playerOneProperty = playerOne.takeTurn();
+		_cardsInPlay.clear();
+		_deck = new Deck();
+	}
 
-		// take both players cards
-		playerOneCard = playerOne._deck.takeCardFromTop();
-		playerTwoCard = playerTwo._deck.takeCardFromTop();
+	private void printDecks()
+	{
+		System.out.println("\n--------------------------------------------");
 
-		playerTwoProperty = playerTwoCard.
-
-		// Read both values for the chosen property
-		playerOneValue = playerOneCard.getPropertyValue(property);
-		playerTwoValue = playerTwoCard.getPropertyValue(property);
-
-		// Store current property name
-		_propertyName = property;
-
-		if(playerOneValue > playerTwoValue)
+		for(int i = _players.size(); i > 0; i--)
 		{
-			// Player one gets the cards
-			playerOne._deck.addCardToDeckBottom(playerTwoCard);
-			playerOne._deck.addCardToDeckBottom(playerOneCard);
+			Player player = _players.get(i-1);
 
-			// Store the hand winning value
-			_propertyValue = playerOneCard.getPropertyValue(property);
-
-			// Report that player one has won
-			System.out.println(playerOne + " has won the this round with card "
-				+ playerOneCard + " which scored " + playerOneValue
-				+ " in category " + property);
-		}
-		else if(playerOneValue == playerTwoValue)
-		{
-			// The cards get put to the side
-			_deck.addCardToDeckTop(playerOneCard);
-			_deck.addCardToDeckTop(playerTwoCard);
-
-			// Doesn't matter which card since values are the same
-			_propertyValue = playerOneCard.getPropertyValue(property);
-
-			// report that this round is a draw
-			// Report that player one has won
-			System.out.println("Players have drawn on " + property + ", playing next card.");
-
-			// Check if player one has any cards left
-			if(!playerOne.hasCards()) return false;
-		}
-		else
-		{
-			// Player two gets the cards
-			playerTwo.addCardToDeckBottom(playerOneCard);
-			playerTwo.addCardToDeckBottom(playerTwoCard);
-
-			// Stor player two's hand winning value
-			_propertyValue = playerTwoCard.getPropertyValue(property);
-
-			// Report that player two has won
-			System.out.println(playerTwo + " has won the this round with card "
-				+ playerTwoCard + " which scored " + playerTwoValue
-				+ " in category " + property);
-
-			// Check if player one has any cards left
-			if(!playerOne.hasCards()) return false;
+			System.out.println(player + ": " + player._deck.toString());
 		}
 
-		// Player took there turn and is still in the game
+		System.out.println("--------------------------------------------\n");
+	}
+
+	/**
+	 * Determines whether all players in the game have at least a single card.
+	 * @return True if all current players have at least a single card.
+	 */
+	private boolean playersHaveCards()
+	{
+		Player player;
+
+		for(int i = _players.size(); i > 0; i--)
+		{
+			player = _players.get(i-1);
+			
+			if(player._deck.isEmpty())
+			{
+				System.err.println("Each player must start the game with at least 1 card, and " + player);
+				return false;
+			}
+		}
+
 		return true;
 	}
 
-	private void notifyWinner(Player player)
+	/**
+	 * Dermines which players at this point have no cards, and removes them
+	 * from the game.
+	 */
+	private void askPlayersToLeave()
 	{
-		System.out.println(player.toString() + " has won the this round with card " 
-				+ player.lookAtLastWinningCard() + " which scored " + _propertyValue
-				+ " in category " + _propertyName);
+		Player player;
+
+		for(int i = _players.size(); i > 0; i--)
+		{
+			player = _players.get(i-1);
+
+			if(player._deck.isEmpty())
+			{
+				_players.remove(player);
+			}
+		}
+	}
+
+	public void addPlayer(Player player)
+	{
+		_players.add(player);
+		_numPlayers++;
+	}
+
+	public void removePlayer(Player player)
+	{
+		_players.remove(player);
+		_numPlayers--;
 	}
 }

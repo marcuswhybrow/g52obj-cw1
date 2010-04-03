@@ -31,5 +31,5 @@ public abstract class Player
 	 * Prompts the player to choose a property as it is their turn.
 	 * @return The property the player has chosen.
 	 */
-	public abstract Property takeTurn();
+	public abstract String takeTurn();
 }
