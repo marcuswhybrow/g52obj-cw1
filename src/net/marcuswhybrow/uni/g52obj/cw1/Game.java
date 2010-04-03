@@ -164,7 +164,7 @@ public class Game
 			}
 
 			// One one player is left
-			System.out.println(_players.get(0) + " has won this round with card "
+			System.out.println(_players.get(0) + " has won the game with card "
 					+ winningCard + " which scored "
 					+ winningCard.getPropertyValue(property)
 					+ "in " + property + ".");

@@ -4,6 +4,7 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 /**
  *
@@ -27,7 +28,8 @@ public class HumanPlayer extends Player
 	public String takeTurn()
 	{
 		int choice = 0;
-		String property, line = null;
+		Map.Entry property;
+		String line = null;
 		BufferedReader in;
 
 		_nextCard = _deck.lookAtTopCard();
@@ -43,6 +45,17 @@ public class HumanPlayer extends Player
 				in = new BufferedReader(new InputStreamReader(System.in));
 				line = in.readLine();
 				choice = Integer.parseInt(line);
+
+				property = (Map.Entry) _nextCard.getProperty(choice);
+
+				if(property != null)
+				{
+					return (String) property.getKey();
+				}
+				else
+				{
+					System.out.println("That number is not an option!");
+				}
 			}
 			catch(NumberFormatException ex)
 			{
@@ -51,19 +64,6 @@ public class HumanPlayer extends Player
 			catch(IOException ex)
 			{
 				System.err.println("There was an IO error: " + ex);
-			}
-			finally
-			{
-				property = (String) _nextCard.getProperty(choice).getKey();
-
-				if(property != null)
-				{
-					return property;
-				}
-				else
-				{
-					System.out.println("That number is not an option!");
-				}
 			}
 		}
 	}
