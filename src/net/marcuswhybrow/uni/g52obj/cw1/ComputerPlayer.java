@@ -67,8 +67,6 @@ public class ComputerPlayer extends Player
 			property = (String) entry.getKey();
 			value = (Integer) entry.getValue();
 
-			System.out.println(value + " > " + _potential.get(bestProperty));
-
 			if(bestProperty == null || value > _potential.get(bestProperty))
 				bestProperty = property;
 

@@ -38,8 +38,8 @@ public class Game
 
 		// Should really be done external to the game.
 		// Players join the game in clockwise fashion.
-		this.addPlayer(new ComputerPlayer());
-		this.addPlayer(new HumanPlayer());
+		this.addPlayer(new HumanPlayer("Marcus"));
+		this.addPlayer(new ComputerPlayer("BadComputer"));
 
 		if(_numPlayers < 2)
 		{
@@ -127,7 +127,7 @@ public class Game
 						winningHand = (Map.Entry) _cardsInPlay.entrySet().toArray()[0];
 						_currentPlayer = (Player) winningHand.getKey();
 						winningCard = (Card) winningHand.getValue();
-						System.out.println(_currentPlayer + " has won this round with card " 
+						System.out.println("\n>>" + _currentPlayer + " has won this round with card "
 								+ winningCard + " which scored "
 								+ winningCard.getPropertyValue(property)
 								+ " in category " + property);
@@ -140,7 +140,7 @@ public class Game
 						continue;
 					default:
 						// Multiple cards drew, the same player has another turn.
-						System.out.println("Players have drawn on " + property + ", playing next card.");
+						System.out.println("\n>> Players have drawn on " + property + ", playing next card.");
 						_deck.addCardsToDeckTop(_cardsInPlay.values());
 						this.printDecks();
 						this.askPlayersToLeave();
@@ -149,7 +149,7 @@ public class Game
 			}
 
 			// One one player is left
-			System.out.println(_players.get(0) + " has won the game with card "
+			System.out.println("\n>> " + _players.get(0) + " has won the game with card "
 					+ winningCard + " which scored "
 					+ winningCard.getPropertyValue(property)
 					+ "in " + property + ".");
@@ -177,8 +177,10 @@ public class Game
 		{
 			Player player = _players.get(i-1);
 
-			System.out.println(player + ": " + player._deck.toString());
+			System.out.println(player + ": " + player._deck);
 		}
+
+		System.out.println("deck: " + _deck);
 
 		System.out.println("--------------------------------------------\n");
 	}
