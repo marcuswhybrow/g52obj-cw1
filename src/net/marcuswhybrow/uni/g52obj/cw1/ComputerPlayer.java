@@ -6,33 +6,42 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- *
+ * A player who determins which property to pick automatcially without console
+ * input.
  * @author marcus
  */
 public class ComputerPlayer extends Player
 {
 	/** The top card in the computers deck */
 	private Card _nextCard;
-
+	/** The record of known scales in value for each of the properties */
 	private HashMap<String, Scale> _scales = new HashMap<String, Scale>();
-
+	/** The quality of values for the current card based on known scales */
 	private HashMap<String, Integer> _potential = new HashMap<String, Integer>();
 
+	/**
+	 * Creates a new computer player with the default name
+	 */
 	public ComputerPlayer()
 	{
 		super("Computer");
 	}
 
+	/**
+	 * Creates a new computer player with a specific name
+	 * @param name The name of the new computer player
+	 */
 	public ComputerPlayer(String name)
 	{
 		super(name);
 	}
 
-	public ComputerPlayer(Deck deck)
-	{
-		super(deck);
-	}
-
+	/**
+	 * Chooses the highest property by learning the scale of the different
+	 * properties and choosing whichever it thinks is the largest based on the
+	 * known scales.
+	 * @return The name of the property chosen
+	 */
 	public String takeTurn()
 	{
 		Iterator properties;
@@ -75,6 +84,10 @@ public class ComputerPlayer extends Player
 		return bestProperty;
 	}
 
+	/**
+	 * A private scale class to allow the computer player to keep track of the
+	 * differnt scales of values know about each property
+	 */
 	public class Scale
 	{
 		/** The current known minimum value */
@@ -82,12 +95,23 @@ public class ComputerPlayer extends Player
 		/** The current known maximum value */
 		private int _max;
 
+		/**
+		 * Creates a new scale object with zeroed minimum and maximum values
+		 */
 		public Scale()
 		{
 			_min = 0;
 			_max = 0;
 		}
 
+		/**
+		 * Tests a value agains the current known scale. If the value is outside
+		 * of the currenlty known scale the scale is expanded to include it.
+		 * A percentage is returned based on the values position in the currently
+		 * known scale.
+		 * @param value The value to test against the scale
+		 * @return The percentage position against the scale
+		 */
 		public int test(int value)
 		{
 			if(value > _max) _max = value;

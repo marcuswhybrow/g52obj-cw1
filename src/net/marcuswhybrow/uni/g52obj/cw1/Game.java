@@ -19,8 +19,6 @@ public class Game
 	 * there is a winner, more than one card if there is a draw */
 	private HashMap<Player, Card> _cardsInPlay;
 
-	private final boolean HUMAN_GOES_FIRST = true;
-
 	/** The plyaers in the game */
 	private ArrayList<Player> _players = new ArrayList<Player>();
 	/** The player whose turn it currently is */
@@ -28,16 +26,13 @@ public class Game
 	/** The number of players in the game */
 	private int _numPlayers;
 
-	private String _propertyName;
-	private int _propertyValue;
-
 	public Game(Deck deck)
 	{
 		_deck = deck;
 		_cardsInPlay = new HashMap<Player, Card>();
 
 		// Should really be done external to the game.
-		// Players join the game in clockwise fashion.
+		// Players play in addition order.
 		this.addPlayer(new HumanPlayer("Marcus"));
 		this.addPlayer(new ComputerPlayer("BadComputer"));
 
@@ -59,6 +54,9 @@ public class Game
 		}
 	}
 
+	/**
+	 * Stars the game of Top Trumps
+	 */
 	public void playGame()
 	{
 		String property = null;
@@ -160,6 +158,11 @@ public class Game
 		}
 	}
 
+	/**
+	 * Utility function to give all the cards not belonging to any player to the
+	 * specified player
+	 * @param player The player to give all the cards to
+	 */
 	private void takeAllCards(Player player)
 	{
 		player._deck.addCardsToDeckBottom(_cardsInPlay.values());
@@ -169,6 +172,9 @@ public class Game
 		_deck = new Deck();
 	}
 
+	/**
+	 * Utility function to print out the status of all the decks in the game.
+	 */
 	private void printDecks()
 	{
 		System.out.println("\n--------------------------------------------");
@@ -226,13 +232,22 @@ public class Game
 		}
 	}
 
+	/**
+	 * Add a player to the game
+	 * @param player The player to add to the game
+	 */
 	public void addPlayer(Player player)
 	{
 		_players.add(player);
 		_numPlayers++;
 	}
 
-	public void removePlayer(Player player)
+	/**
+	 * Utility function to remove a player from the game once they have no cards
+	 * remaining at the end of a round.
+	 * @param player The player to remove from the game
+	 */
+	private void removePlayer(Player player)
 	{
 		_players.remove(player);
 		_numPlayers--;

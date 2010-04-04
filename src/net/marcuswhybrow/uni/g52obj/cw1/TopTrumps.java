@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 /**
  *
- * @author marcus
+ * @author G52OBJ
  */
 public class TopTrumps
 {

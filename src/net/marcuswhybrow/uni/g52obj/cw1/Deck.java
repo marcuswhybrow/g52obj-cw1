@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.ArrayList;
 
 /**
- *
+ * Contains an ordered collection of cards. Cards can be inserted into the deck
+ * in various ways and likewise removed.
  * @author marcus
  */
 public class Deck
@@ -15,13 +16,20 @@ public class Deck
 	private LinkedList<Card> _cards;
 	/** The number of cards in this deck */
 	private int _sizeOfDeck;
-	
+
+	/**
+	 * Creates an empty new deck
+	 */
 	public Deck()
 	{
 		_cards = new LinkedList<Card>();
 		_sizeOfDeck = 0;
 	}
 
+	/**
+	 * Gets the number of cards contained within the deck
+	 * @return The number of cards in this deck
+	 */
 	public int getSize()
 	{
 		return _sizeOfDeck;
@@ -53,18 +61,30 @@ public class Deck
 		}
 	}
 
+	/**
+	 * Adds *multiple* cards face down to the *top* of the deck
+	 * @param c The collection of cards to add to the bottom of the deck
+	 */
 	public void addCardsToDeckTop(Collection c)
 	{
 		_cards.addAll(0, c);
 		_sizeOfDeck += c.size();
 	}
 
+	/**
+	 * Adds *multiple* cards face down to the *bottom* of the deck
+	 * @param c THe collection of cards to add to the bottom of the deck
+	 */
 	public void addCardsToDeckBottom(Collection c)
 	{
 		_cards.addAll(c);
 		_sizeOfDeck += c.size();
 	}
 
+	/**
+	 * Get every card from this deck (removing them from this deck).
+	 * @return Every card from this deck
+	 */
 	public ArrayList<Card> takeAllCards()
 	{
 		ArrayList cards = new ArrayList<Card>(_cards);
@@ -107,7 +127,7 @@ public class Deck
 	}
 
 	/**
-	 * Returns but does not remove the top of the deck.
+	 * Returns but does not remove the *top* card of the deck.
 	 * @return The top card of the deck
 	 */
 	public Card lookAtTopCard()
@@ -115,6 +135,10 @@ public class Deck
 		return _cards.peekFirst();
 	}
 
+	/**
+	 * Returns but does not remove the *bottom* card of the deck
+	 * @return The bottom card of the deck
+	 */
 	public Card lookAtBottomCard()
 	{
 		return _cards.peekLast();
@@ -174,6 +198,10 @@ public class Deck
 		return _cards.isEmpty();
 	}
 
+	/**
+	 * Get the string representation of this deck
+	 * @return A representation of every card in the deck
+	 */
 	public String toString()
 	{
 		return _cards.toString();

@@ -2,14 +2,14 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 /**
- *
+ * An abstract base class for players with the Top Trumps game
  * @author marcus
  */
 public abstract class Player
 {
 	/** The player's personal deck of cards */
 	protected Deck _deck;
-
+	/** The name of the player to represent them within the game */
 	private String _name;
 
 	/**
@@ -37,6 +37,10 @@ public abstract class Player
 	 */
 	public abstract String takeTurn();
 
+	/**
+	 * Get the string representation of the player
+	 * @return The name of the player
+	 */
 	public String toString()
 	{
 		return _name;
