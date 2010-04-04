@@ -22,6 +22,11 @@ public class Deck
 		_sizeOfDeck = 0;
 	}
 
+	public int getSize()
+	{
+		return _sizeOfDeck;
+	}
+
 	/**
 	 * Adds a card face down to the *top* of the deck.
 	 * @param card The card to add to the top of the deck.
@@ -51,22 +56,20 @@ public class Deck
 	public void addCardsToDeckTop(Collection c)
 	{
 		_cards.addAll(0, c);
+		_sizeOfDeck += c.size();
 	}
 
 	public void addCardsToDeckBottom(Collection c)
 	{
 		_cards.addAll(c);
-	}
-
-	public void addCardsToDeckBottom(Card[] cards)
-	{
-		_cards.addAll(_cards);
+		_sizeOfDeck += c.size();
 	}
 
 	public ArrayList<Card> takeAllCards()
 	{
 		ArrayList cards = new ArrayList<Card>(_cards);
 		_cards.clear();
+		_sizeOfDeck = 0;
 		return cards;
 	}
 
