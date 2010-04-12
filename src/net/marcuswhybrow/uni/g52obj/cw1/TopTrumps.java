@@ -40,10 +40,6 @@ public class TopTrumps
 			properties.add(tokenizer.nextToken());
 		}
 
-		// Second line contains propert types
-		line = reader.readLine();
-		tokenizer = new StringTokenizer(line, ",", false);
-
 		while((line = reader.readLine()) != null)
 		{
 			lineTokenizer = new StringTokenizer(line, ",", false);
