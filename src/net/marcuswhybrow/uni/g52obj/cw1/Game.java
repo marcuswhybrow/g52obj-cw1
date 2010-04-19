@@ -33,20 +33,18 @@ public class Game
 
 		// Should really be done external to the game.
 		// Players play in addition order.
-		this.addPlayer(new HumanPlayer("Marcus"));
-		this.addPlayer(new ComputerPlayer("BadComputer"));
+		this.addPlayer(new Player("Marcus", new HumanTurn()));
+		this.addPlayer(new Player("BadComputer", new ComputerTurn()));
 
 		if(_numPlayers < 2)
-		{
 			System.err.println("A game must have at least 2 players");
-		}
 		else
 		{
 			// Deal cards to all players in a clockwise fashion
 			while(!_deck.isEmpty())
 			{
 				for(int i = 0; i < _numPlayers; i++)
-					_players.get(i)._deck.addCardToDeckTop(this._deck.takeCardFromTop());
+					_players.get(i).getDeck().addCardToDeckTop(this._deck.takeCardFromTop());
 			}
 
 			// Set the current player as the first player
@@ -77,7 +75,7 @@ public class Game
 				_cardsInPlay.clear();
 
 				// The leading player takes their turn (choosing a property)
-				property = _currentPlayer.takeTurn();
+				property = _currentPlayer.getTurn().takeTurn(_currentPlayer.getDeck().lookAtTopCard());
 				allPlayers = _players.iterator();
 
 				// Evaluate all players cards, winning or drawing cards end up
@@ -85,7 +83,7 @@ public class Game
 				while(allPlayers.hasNext())
 				{
 					player = (Player) allPlayers.next();
-					playersCard = player._deck.takeCardFromTop();
+					playersCard = player.getDeck().takeCardFromTop();
 
 					if(_cardsInPlay.size() == 0)
 					{
@@ -165,8 +163,8 @@ public class Game
 	 */
 	private void takeAllCards(Player player)
 	{
-		player._deck.addCardsToDeckBottom(_cardsInPlay.values());
-		player._deck.addCardsToDeckBottom(_deck.takeAllCards());
+		player.getDeck().addCardsToDeckBottom(_cardsInPlay.values());
+		player.getDeck().addCardsToDeckBottom(_deck.takeAllCards());
 
 		_cardsInPlay.clear();
 		_deck = new Deck();
@@ -183,7 +181,7 @@ public class Game
 		{
 			Player player = _players.get(i-1);
 
-			System.out.println(player + "(" + player._deck.getSize() + "): " + player._deck);
+			System.out.println(player + "(" + player.getDeck().getSize() + "): " + player.getDeck());
 		}
 
 		System.out.println("deck(" + _deck.getSize() + "): " + _deck);
@@ -203,7 +201,7 @@ public class Game
 		{
 			player = _players.get(i-1);
 			
-			if(player._deck.isEmpty())
+			if(player.getDeck().isEmpty())
 			{
 				System.err.println("Each player must start the game with at least 1 card, and " + player);
 				return false;
@@ -225,7 +223,7 @@ public class Game
 		{
 			player = _players.get(i-1);
 
-			if(player._deck.isEmpty())
+			if(player.getDeck().isEmpty())
 			{
 				this.removePlayer(player);
 			}

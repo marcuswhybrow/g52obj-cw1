@@ -6,53 +6,26 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * A player who determins which property to pick automatcially without console
- * input.
+ *
  * @author marcus
  */
-public class ComputerPlayer extends Player
+public class ComputerTurn extends Turn
 {
-	/** The top card in the computers deck */
-	private Card _nextCard;
 	/** The record of known scales in value for each of the properties */
 	private HashMap<String, Scale> _scales = new HashMap<String, Scale>();
 	/** The quality of values for the current card based on known scales */
 	private HashMap<String, Integer> _potential = new HashMap<String, Integer>();
-
-	/**
-	 * Creates a new computer player with the default name
-	 */
-	public ComputerPlayer()
-	{
-		super("Computer");
-	}
-
-	/**
-	 * Creates a new computer player with a specific name
-	 * @param name The name of the new computer player
-	 */
-	public ComputerPlayer(String name)
-	{
-		super(name);
-	}
-
-	/**
-	 * Chooses the highest property by learning the scale of the different
-	 * properties and choosing whichever it thinks is the largest based on the
-	 * known scales.
-	 * @return The name of the property chosen
-	 */
-	public String takeTurn()
+	
+	public String takeTurn(Card card)
 	{
 		Iterator properties;
 		Map.Entry entry;
 		String property, bestProperty = null;
 		int value;
-		
-		_nextCard = _deck.lookAtTopCard();		
-		_nextCard.printCard();
 
-		properties = _nextCard.getProperties().iterator();
+		card.printCard();
+
+		properties = card.getProperties().iterator();
 
 		// Update all property potentials
 		while(properties.hasNext())
@@ -63,7 +36,7 @@ public class ComputerPlayer extends Player
 
 			if(!_scales.containsKey(property))
 				_scales.put(property, new Scale());
-			
+
 			_potential.put(property, _scales.get(property).test(value));
 		}
 
@@ -84,11 +57,7 @@ public class ComputerPlayer extends Player
 		return bestProperty;
 	}
 
-	/**
-	 * A private scale class to allow the computer player to keep track of the
-	 * differnt scales of values know about each property
-	 */
-	public class Scale
+	private class Scale
 	{
 		/** The current known minimum value */
 		private int _min;
@@ -109,6 +78,7 @@ public class ComputerPlayer extends Player
 		 * of the currenlty known scale the scale is expanded to include it.
 		 * A percentage is returned based on the values position in the currently
 		 * known scale.
+		 * 
 		 * @param value The value to test against the scale
 		 * @return The percentage position against the scale
 		 */
