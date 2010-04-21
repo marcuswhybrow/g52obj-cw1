@@ -4,6 +4,7 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -46,7 +47,7 @@ public class Card
 	 * Gets the set of properties associated with this card
 	 * @return A Set containing Map.Entry objects representing properties
 	 */
-	public Set getProperties()
+	public Set<Entry<String, Integer>> getProperties()
 	{
 		return _properties.entrySet();
 	}

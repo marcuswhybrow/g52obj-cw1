@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,8 +35,10 @@ public class Game
 
 		// Should really be done external to the game.
 		// Players play in addition order.
-		this.addPlayer(new Player("Marcus", new HumanTurn()));
-		this.addPlayer(new Player("BadComputer", new ComputerTurn()));
+		this.addPlayer(new Player("Computer One", new ComputerTurn()));
+		this.addPlayer(new Player("Computer Two", new ComputerTurn()));
+		this.addPlayer(new Player("Computer Three", new ComputerTurn()));
+		this.addPlayer(new Player("Computer Four", new ComputerTurn()));
 
 		if(_numPlayers < 2)
 			System.err.println("A game must have at least 2 players");
@@ -70,6 +74,16 @@ public class Game
 				System.out.println("\n============================================");
 				System.out.println("NEW ROUND");
 				System.out.println("============================================\n");
+
+				try
+				{
+					// Sleep for one second
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException ex)
+				{
+					Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+				}
 
 				// Clear the cards in play to start a new round
 				_cardsInPlay.clear();

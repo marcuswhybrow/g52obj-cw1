@@ -18,19 +18,14 @@ public class ComputerTurn extends Turn
 	
 	public String takeTurn(Card card)
 	{
-		Iterator properties;
-		Map.Entry entry;
 		String property, bestProperty = null;
 		int value;
 
 		card.printCard();
 
-		properties = card.getProperties().iterator();
-
 		// Update all property potentials
-		while(properties.hasNext())
+		for(Map.Entry entry : card.getProperties())
 		{
-			entry = (Map.Entry) properties.next();
 			property = (String) entry.getKey();
 			value = (Integer) entry.getValue();
 
@@ -40,12 +35,9 @@ public class ComputerTurn extends Turn
 			_potential.put(property, _scales.get(property).test(value));
 		}
 
-		properties = _potential.entrySet().iterator();
-
 		// Choose the property with the most potential
-		while(properties.hasNext())
+		for(Map.Entry entry : _potential.entrySet())
 		{
-			entry = (Map.Entry) properties.next();
 			property = (String) entry.getKey();
 			value = (Integer) entry.getValue();
 
