@@ -1,7 +1,10 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 /**
- * Represents a proeprty and its value
+ * Represents a proeprty and its value, originally represented as a Map.Entry
+ * between a String (as the key) and an Integer (as the value). This however was
+ * relatively horible syntactically, and despite the Property class being very
+ * simple is more flexible.
  *
  * @author Marcus Whybrow
  */
