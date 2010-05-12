@@ -15,5 +15,5 @@ public abstract class Turn
 	 *
 	 * @return The property chosen
 	 */
-	public abstract String takeTurn(Card card);
+	public abstract Property takeTurn(Card card);
 }

@@ -3,6 +3,8 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A ComputerTurn extends the Turn Behaviour class and represents the act of
@@ -21,39 +23,45 @@ public class ComputerTurn extends Turn
 	 * @param card The card to examine
 	 * @return The name of the property
 	 */
-	public String takeTurn(Card card)
+	public Property takeTurn(Card card)
 	{
-		/** The property currently being assessed */
-		String property;
 		/** The best property found thus far at a given point in time */
-		String bestProperty = null;
-		/** The value of the current property */
-		int value;
+		Property bestProperty = null;
 
 		card.printCard();
 
-		// Update all property potentials
-		for(Map.Entry entry : card.getProperties())
+		// Some fake waiting so an observer may view what the computer is doing
+		try
 		{
-			property = (String) entry.getKey();
-			value = (Integer) entry.getValue();
+			// Sleep for one second
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException ex)
+		{
+			Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+		}
 
-			if(!_scales.containsKey(property))
-				_scales.put(property, new Scale());
+		// Update all property potentials
+		for(Property property : card.getProperties())
+		{
+			if(!_scales.containsKey(property.getName()))
+				_scales.put(property.getName(), new Scale());
 
-			_potential.put(property, _scales.get(property).test(value));
+			_potential.put(property.getName(), _scales.get(property.getName()).test(property.getValue()));
 		}
 
 		// Choose the property with the most potential
 		for(Map.Entry entry : _potential.entrySet())
 		{
-			property = (String) entry.getKey();
-			value = (Integer) entry.getValue();
+			Property property = card.getProperty((String) entry.getKey());
+			int value = (Integer) entry.getValue();
 
-			if(bestProperty == null || value > _potential.get(bestProperty))
+			if(bestProperty == null || value > _potential.get(bestProperty.getName()))
 				bestProperty = property;
-
 		}
+
+		System.out.println("    " + _scales.toString());
+		System.out.println("    " + _potential.toString());
 
 		return bestProperty;
 	}
@@ -106,6 +114,12 @@ public class ComputerTurn extends Turn
 				return (int) (( (double) ( value - _min) / (double) (_max - _min) ) * 100);
 			else
 				return 0;
+		}
+
+		@Override
+		public String toString()
+		{
+			return "{" + _min + " -> " + _max + "}";
 		}
 
 		// Private Methods

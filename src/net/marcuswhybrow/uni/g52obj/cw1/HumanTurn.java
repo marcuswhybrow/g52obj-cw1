@@ -23,10 +23,10 @@ public class HumanTurn extends Turn
 	 * user for a choice.
 	 * @return The name of the property the user chose
 	 */
-	public String takeTurn(Card card)
+	public Property takeTurn(Card card)
 	{
 		int choice = 0;
-		Map.Entry property;
+		Property property;
 		String line = null;
 		BufferedReader in;
 
@@ -46,16 +46,17 @@ public class HumanTurn extends Turn
 				choice = Integer.parseInt(line);
 
 				// Attempt to get the chosen property from the card
-				property = (Map.Entry) card.getProperty(choice);
+				property = card.getProperty(choice);
 
 				// return that property or try again
 				if(property != null)
 				{
-					return (String) property.getKey();
+					return property;
 				}
 				else
 				{
 					System.out.println("That number is not an option!");
+					continue;
 				}
 			}
 			catch(NumberFormatException ex)

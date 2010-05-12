@@ -1,11 +1,8 @@
 
 package net.marcuswhybrow.uni.g52obj.cw1;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Represents a single card in the Top Trumps game, contains the cards title
@@ -26,7 +23,7 @@ public class Card
 	public Card(String title)
 	{
 		_title = title;
-		_properties = new LinkedHashMap<String, Integer>();
+		_properties = new LinkedHashMap<String, Property>();
 	}
 
 	/**
@@ -37,7 +34,7 @@ public class Card
 	 */
 	public void addProperty(String name, int value)
 	{
-		_properties.put(name, value);
+		_properties.put(name, new Property(name, value));
 		_numProperties ++;
 	}
 
@@ -46,38 +43,38 @@ public class Card
 	 *
 	 * @return A Set containing Map.Entry objects representing properties
 	 */
-	public Set<Entry<String, Integer>> getProperties()
+	public Collection<Property> getProperties()
 	{
-		return _properties.entrySet();
+		return _properties.values();
 	}
 
 	/**
-	 * Get the specific Map.Entry representing a property by its number
+	 * Get the property object associated with the name provided.
+	 *
+	 * @param name The name of th eproperty you wish to retrieve
+	 * @return The property or null
+	 */
+	public Property getProperty(String name)
+	{
+		return _properties.get(name);
+	}
+
+	/**
+	 * Get the Property by its number
 	 *
 	 * @param number The number of the property in the choice list
 	 * @return The property for that number or null if number is incorrect
 	 */
-	public Map.Entry getProperty(int number)
+	public Property getProperty(int number)
 	{
 		try
 		{
-			return (Map.Entry) _properties.entrySet().toArray()[number-1];
+			return (Property) _properties.values().toArray()[number-1];
 		}
 		catch(IndexOutOfBoundsException ex)
 		{
 			return null;
 		}
-	}
-
-	/**
-	 * Get the value of a property for this card by the property's name
-	 *
-	 * @param name The name of the property
-	 * @return The value of this property
-	 */
-	public int getPropertyValue(String name)
-	{
-		return _properties.get(name);
 	}
 
 	/**
@@ -95,19 +92,13 @@ public class Card
 	 */
 	public void printCard()
 	{
-		Iterator properties = _properties.entrySet().iterator();
 		int choiceNumber = 1;
-		Map.Entry entry;
 
 		System.out.println("Top Card is " + _title + ":\n");
 		System.out.println("Categories:");
 
-		while(properties.hasNext())
-		{
-			entry = (Map.Entry) properties.next();
-			System.out.println(choiceNumber + ". " + entry.getKey() + ": " + entry.getValue());
-			choiceNumber++;
-		}
+		for(Property property : _properties.values())
+			System.out.println(choiceNumber++ + ". " + property);
 	}
 
 	/**
@@ -121,11 +112,11 @@ public class Card
 	 * @param property The name of the subject property
 	 * @return A negative, zero or positive integer
 	 */
-	public int compareTo(Card otherCard, String property)
+	public int compareTo(Property property)
 	{
 		int thisValue, otherValue;
-		thisValue = this.getPropertyValue(property);
-		otherValue = otherCard.getPropertyValue(property);
+		thisValue = _properties.get(property.getName()).getValue();
+		otherValue = property.getValue();
 
 		if(thisValue < otherValue) return -1;
 		else if(thisValue == otherValue) return 0;
@@ -143,7 +134,7 @@ public class Card
 	/** The title of the card */
 	private String _title;
 	/** The properties assigned to this card */
-	private LinkedHashMap<String, Integer> _properties;
+	private LinkedHashMap<String, Property> _properties;
 	/** The number of properties this card has */
 	private int _numProperties;
 }

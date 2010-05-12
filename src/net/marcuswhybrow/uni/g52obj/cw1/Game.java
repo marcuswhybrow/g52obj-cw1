@@ -2,11 +2,8 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Contains cards and players, co-ordinating the distibution of cards to those
@@ -37,10 +34,8 @@ public class Game
 		// NOTE: player should be added externally, that is not from within the
 		// Game class, however I was unsure wether we had control over files
 		// provided initially in the coursework.
-		this.addPlayer(new Player("Computer One", new ComputerTurn()));
-		this.addPlayer(new Player("Computer Two", new ComputerTurn()));
-		this.addPlayer(new Player("Computer Three", new ComputerTurn()));
-		this.addPlayer(new Player("Computer Four", new ComputerTurn()));
+		this.addPlayer(new Player("Human", new HumanTurn()));
+		this.addPlayer(new Player("Computer", new ComputerTurn()));
 
 		if(_numPlayers < 2)
 			System.err.println("A game must have at least 2 players");
@@ -62,9 +57,7 @@ public class Game
 	 */
 	public void playGame()
 	{
-		String property = null;
-		Iterator allPlayers;
-		Player player;
+		Property property = null;
 		Card playersCard, currentBestCard, winningCard = null;
 		Map.Entry winningHand;
 
@@ -73,31 +66,19 @@ public class Game
 			while(_numPlayers > 1)
 			{
 				System.out.println("\n============================================");
-				System.out.println("NEW ROUND");
+				System.out.println("NEW ROUND : " + _currentPlayer + " chooses");
 				System.out.println("============================================\n");
-
-				try
-				{
-					// Sleep for one second
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException ex)
-				{
-					Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-				}
 
 				// Clear the cards in play to start a new round
 				_cardsInPlay.clear();
 
 				// The leading player takes their turn (choosing a property)
 				property = _currentPlayer.getTurn().takeTurn(_currentPlayer.getDeck().lookAtTopCard());
-				allPlayers = _players.iterator();
 
 				// Evaluate all players cards, winning or drawing cards end up
 				// "cards in play" and losing cards end up in the shared deck.
-				while(allPlayers.hasNext())
+				for(Player player : _players)
 				{
-					player = (Player) allPlayers.next();
 					playersCard = player.getDeck().takeCardFromTop();
 
 					if(_cardsInPlay.size() == 0)
@@ -108,7 +89,7 @@ public class Game
 					{
 						currentBestCard = (Card) _cardsInPlay.values().toArray()[0];
 
-						switch(playersCard.compareTo(currentBestCard, property))
+						switch(playersCard.compareTo(currentBestCard.getProperty(property.getName())))
 						{
 							case -1:
 								// Player's card is worse than current best
@@ -132,7 +113,9 @@ public class Game
 				switch(_cardsInPlay.size())
 				{
 					case 0:
-						break;
+						// Hmmm, there should never be no potential winnng cards
+						// Ah well, lets just start the round again
+						continue;
 					case 1:
 						// A single card beat all others
 						winningHand = (Map.Entry) _cardsInPlay.entrySet().toArray()[0];
@@ -140,8 +123,8 @@ public class Game
 						winningCard = (Card) winningHand.getValue();
 						System.out.println("\n>> " + _currentPlayer + " has won this round with card "
 								+ winningCard + " which scored "
-								+ winningCard.getPropertyValue(property)
-								+ " in \"" + property + "\".");
+								+ winningCard.getProperty(property.getName()).getValue()
+								+ " in \"" + property.getName() + "\".");
 
 						// Winner takes all cards
 						this.takeAllCards(_currentPlayer);
@@ -151,7 +134,7 @@ public class Game
 						continue;
 					default:
 						// Multiple cards drew, the same player has another turn.
-						System.out.println("\n>> Players have drawn on \"" + property + "\", playing next card.");
+						System.out.println("\n>> Players have drawn on \"" + property.getName() + "\", playing next card.");
 						_deck.addCardsToDeckTop(_cardsInPlay.values());
 						this.printDecks();
 						this.askPlayersToLeave();
@@ -162,7 +145,7 @@ public class Game
 			// One one player is left
 			System.out.println("\n>> " + _players.get(0) + " has won the game with card "
 					+ winningCard + " which scored "
-					+ winningCard.getPropertyValue(property)
+					+ winningCard.getProperty(property.getName()).getValue()
 					+ " in " + property + ".");
 		}
 		else
