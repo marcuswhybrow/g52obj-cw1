@@ -11,19 +11,16 @@ import java.util.Set;
  * Represents a single card in the Top Trumps game, contains the cards title
  * and the properties which define it.
  * 
- * @author marcus
+ * @author Marcus Whybrow
  */
 public class Card
 {
-	/** The title of the card */
-	private String _title;
-	/** The properties assigned to this card */
-	private LinkedHashMap<String, Integer> _properties;
-	/** The number of properties this card has */
-	private int _numProperties;
+	// Public Methods
+
 
 	/**
 	 * Creates a new card with the specified title
+	 *
 	 * @param title The title for the new card
 	 */
 	public Card(String title)
@@ -34,6 +31,7 @@ public class Card
 
 	/**
 	 * Adds a property to this card
+	 *
 	 * @param name The name of the property
 	 * @param value The value of the property
 	 */
@@ -45,6 +43,7 @@ public class Card
 
 	/**
 	 * Gets the set of properties associated with this card
+	 *
 	 * @return A Set containing Map.Entry objects representing properties
 	 */
 	public Set<Entry<String, Integer>> getProperties()
@@ -54,6 +53,7 @@ public class Card
 
 	/**
 	 * Get the specific Map.Entry representing a property by its number
+	 *
 	 * @param number The number of the property in the choice list
 	 * @return The property for that number or null if number is incorrect
 	 */
@@ -71,6 +71,7 @@ public class Card
 
 	/**
 	 * Get the value of a property for this card by the property's name
+	 *
 	 * @param name The name of the property
 	 * @return The value of this property
 	 */
@@ -81,6 +82,7 @@ public class Card
 
 	/**
 	 * Get the string representation of this card
+	 *
 	 * @return The title of the card
 	 */
 	public String toString()
@@ -114,6 +116,7 @@ public class Card
 	 * then a negative number is returned, if this card evaluates to be equal to
 	 * the other card then 0 is returned and if this card evaluates to be greater
 	 * than the other card a positive integer is returned.
+	 * 
 	 * @param otherCard The card to compare with
 	 * @param property The name of the subject property
 	 * @return A negative, zero or positive integer
@@ -128,4 +131,19 @@ public class Card
 		else if(thisValue == otherValue) return 0;
 		else return 1;
 	}
+
+
+	// Private Methods
+	// There are no private methods in this class
+
+
+	// Instance Variables
+
+
+	/** The title of the card */
+	private String _title;
+	/** The properties assigned to this card */
+	private LinkedHashMap<String, Integer> _properties;
+	/** The number of properties this card has */
+	private int _numProperties;
 }

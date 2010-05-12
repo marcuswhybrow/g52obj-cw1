@@ -9,32 +9,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Contains cards and players, co-ordinating the distibution of cards to those
+ * players and then the turn based comparision of properties between those
+ * players.
  *
- * @author marcus
+ * Players are ejected from the game once there individual deck of cards becomes
+ * zero.
+ *
+ * @author Marcus Whybrow
  */
 public class Game
 {
-	/** The deck of cards owned by no player */
-	private Deck _deck;
+	// Public Methods
 
-	/** The cards in contest to win the round, eventually contains one card if
-	 * there is a winner, more than one card if there is a draw */
-	private HashMap<Player, Card> _cardsInPlay;
 
-	/** The plyaers in the game */
-	private ArrayList<Player> _players = new ArrayList<Player>();
-	/** The player whose turn it currently is */
-	private Player _currentPlayer;
-	/** The number of players in the game */
-	private int _numPlayers;
-
+	/**
+	 * Creates a new game with the specified deck of cards.
+	 *
+	 * @param deck The deck of cards to play the game with.
+	 */
 	public Game(Deck deck)
 	{
 		_deck = deck;
 		_cardsInPlay = new HashMap<Player, Card>();
 
-		// Should really be done external to the game.
 		// Players play in addition order.
+		// NOTE: player should be added externally, that is not from within the
+		// Game class, however I was unsure wether we had control over files
+		// provided initially in the coursework.
 		this.addPlayer(new Player("Computer One", new ComputerTurn()));
 		this.addPlayer(new Player("Computer Two", new ComputerTurn()));
 		this.addPlayer(new Player("Computer Three", new ComputerTurn()));
@@ -46,10 +48,8 @@ public class Game
 		{
 			// Deal cards to all players in a clockwise fashion
 			while(!_deck.isEmpty())
-			{
 				for(int i = 0; i < _numPlayers; i++)
 					_players.get(i).getDeck().addCardToDeckTop(this._deck.takeCardFromTop());
-			}
 
 			// Set the current player as the first player
 			_currentPlayer = _players.get(0);
@@ -57,7 +57,8 @@ public class Game
 	}
 
 	/**
-	 * Stars the game of Top Trumps
+	 * Stats the game of TopTrumps and begins the game loop. The game is over
+	 * once this method exits.
 	 */
 	public void playGame()
 	{
@@ -171,8 +172,36 @@ public class Game
 	}
 
 	/**
+	 * Registers a player with the game
+	 *
+	 * @param player The player to add to the game
+	 */
+	public void addPlayer(Player player)
+	{
+		_players.add(player);
+		_numPlayers++;
+	}
+
+	/**
+	 * Deregisters a player with the game. Usually used to remove a player who
+	 * has no cards.
+	 *
+	 * @param player The player to remove from the game
+	 */
+	public void removePlayer(Player player)
+	{
+		_players.remove(player);
+		_numPlayers--;
+	}
+
+
+	// Private Methods
+
+
+	/**
 	 * Utility function to give all the cards not belonging to any player to the
 	 * specified player
+	 * 
 	 * @param player The player to give all the cards to
 	 */
 	private void takeAllCards(Player player)
@@ -205,6 +234,8 @@ public class Game
 
 	/**
 	 * Determines whether all players in the game have at least a single card.
+	 * A utility function only used at the start of the game.
+	 *
 	 * @return True if all current players have at least a single card.
 	 */
 	private boolean playersHaveCards()
@@ -226,8 +257,8 @@ public class Game
 	}
 
 	/**
-	 * Dermines which players at this point have no cards, and removes them
-	 * from the game.
+	 * Dermines which players at this point have no cards, and ejects them from
+	 * the game.
 	 */
 	private void askPlayersToLeave()
 	{
@@ -238,30 +269,25 @@ public class Game
 			player = _players.get(i-1);
 
 			if(player.getDeck().isEmpty())
-			{
 				this.removePlayer(player);
-			}
 		}
 	}
 
-	/**
-	 * Add a player to the game
-	 * @param player The player to add to the game
-	 */
-	public void addPlayer(Player player)
-	{
-		_players.add(player);
-		_numPlayers++;
-	}
 
-	/**
-	 * Utility function to remove a player from the game once they have no cards
-	 * remaining at the end of a round.
-	 * @param player The player to remove from the game
-	 */
-	private void removePlayer(Player player)
-	{
-		_players.remove(player);
-		_numPlayers--;
-	}
+	// Private Variables
+
+	
+	/** The deck of cards owned by no player */
+	private Deck _deck;
+
+	/** The cards in contest to win the round, eventually contains one card if
+	 * there is a winner, more than one card if there is a draw */
+	private HashMap<Player, Card> _cardsInPlay;
+
+	/** The players in the game */
+	private ArrayList<Player> _players = new ArrayList<Player>();
+	/** The player whose turn it currently is */
+	private Player _currentPlayer;
+	/** The number of players in the game */
+	private int _numPlayers;
 }

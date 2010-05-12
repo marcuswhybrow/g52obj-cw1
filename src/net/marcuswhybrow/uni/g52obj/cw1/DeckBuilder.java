@@ -4,14 +4,13 @@ package net.marcuswhybrow.uni.g52obj.cw1;
 /**
  * Builds a new deck by adding cards to a deck, and also allowing properties to
  * be added to the most recently added card
- * @author marcus
+ *
+ * @author Marcus Whybrow
  */
 public class DeckBuilder implements IDeckBuilder
 {
-	/** The the deck of cards */
-	private Deck _deck;
-	/** The card most recently added to the deck */
-	private Card _latestAddition;
+	// Public Methods
+
 
 	/**
 	 * Creates a new deck builder with an empty deck
@@ -23,6 +22,7 @@ public class DeckBuilder implements IDeckBuilder
 
 	/**
 	 * Adds a new card to the deck
+	 *
 	 * @param title The title of the new card
 	 */
 	public void newCard(String title)
@@ -32,7 +32,8 @@ public class DeckBuilder implements IDeckBuilder
 	}
 
 	/**
-	 * Adds a property to the most recentyl added card
+	 * Adds a property to the most recently added card
+	 *
 	 * @param name The name of the property
 	 * @param value The value of the property
 	 */
@@ -43,10 +44,24 @@ public class DeckBuilder implements IDeckBuilder
 
 	/**
 	 * Get the deck of cards in its current state
+	 * 
 	 * @return The current deck of cards
 	 */
 	public Deck getDeck()
 	{
 		return _deck;
 	}
+
+
+	// Private Methods
+	// There are no private methods in this class
+
+
+	// Instance Variables
+	
+
+	/** The the deck of cards */
+	private Deck _deck;
+	/** The card most recently added to the deck */
+	private Card _latestAddition;
 }

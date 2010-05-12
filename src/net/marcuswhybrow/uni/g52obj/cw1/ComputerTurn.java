@@ -2,23 +2,32 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * A ComputerTurn extends the Turn Behaviour class and represents the act of
+ * choosing a property by assessing the known values previously seen in game.
  *
- * @author marcus
+ * @author Marcus Whybrow
  */
 public class ComputerTurn extends Turn
 {
-	/** The record of known scales in value for each of the properties */
-	private HashMap<String, Scale> _scales = new HashMap<String, Scale>();
-	/** The quality of values for the current card based on known scales */
-	private HashMap<String, Integer> _potential = new HashMap<String, Integer>();
-	
+	// Public Methods
+
+
+	/**
+	 * Programatically chooses a Card property based upon known scales
+	 *
+	 * @param card The card to examine
+	 * @return The name of the property
+	 */
 	public String takeTurn(Card card)
 	{
-		String property, bestProperty = null;
+		/** The property currently being assessed */
+		String property;
+		/** The best property found thus far at a given point in time */
+		String bestProperty = null;
+		/** The value of the current property */
 		int value;
 
 		card.printCard();
@@ -49,12 +58,26 @@ public class ComputerTurn extends Turn
 		return bestProperty;
 	}
 
+
+	// Private Methods
+	
+
+	/**
+	 * Private class which holds the computers representation of scales. One
+	 * Scale object is stored for each property known. And the 'known' scale is
+	 * the range of values which have been seen by the computer (including only
+	 * it's own cards, i.e. not taking into account the opponants cards).
+	 *
+	 * When the computer chooses the best property it does so by seeing where
+	 * each current values falls on the known scale, and chooses the one closest
+	 * to the top end.
+	 *
+	 * @author Marcus Whybrow
+	 */
 	private class Scale
 	{
-		/** The current known minimum value */
-		private int _min;
-		/** The current known maximum value */
-		private int _max;
+		// Public Methods
+		
 
 		/**
 		 * Creates a new scale object with zeroed minimum and maximum values
@@ -84,5 +107,25 @@ public class ComputerTurn extends Turn
 			else
 				return 0;
 		}
+
+		// Private Methods
+		// There are no private methods in this class
+
+		
+		// Instance Variables
+		
+
+		/** The current known minimum value */
+		private int _min;
+		/** The current known maximum value */
+		private int _max;
 	}
+
+	// Instance Variables
+
+
+	/** The record of known scales in value for each of the properties */
+	private HashMap<String, Scale> _scales = new HashMap<String, Scale>();
+	/** The quality of values for the current card based on known scales */
+	private HashMap<String, Integer> _potential = new HashMap<String, Integer>();
 }

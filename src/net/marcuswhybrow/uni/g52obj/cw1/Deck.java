@@ -8,15 +8,14 @@ import java.util.ArrayList;
 /**
  * Contains an ordered collection of cards. Cards can be inserted into the deck
  * in various ways and likewise removed.
- * @author marcus
+ * 
+ * @author Marcus Whybrow
  */
 public class Deck
 {
-	/** The cards in this decl */
-	private LinkedList<Card> _cards;
-	/** The number of cards in this deck */
-	private int _sizeOfDeck;
+	// Public Methods
 
+	
 	/**
 	 * Creates an empty new deck
 	 */
@@ -28,6 +27,7 @@ public class Deck
 
 	/**
 	 * Gets the number of cards contained within the deck
+	 * 
 	 * @return The number of cards in this deck
 	 */
 	public int getSize()
@@ -35,8 +35,11 @@ public class Deck
 		return _sizeOfDeck;
 	}
 
+	// "Adding Cards to the Deck" Methods
+
 	/**
 	 * Adds a card face down to the *top* of the deck.
+	 * 
 	 * @param card The card to add to the top of the deck.
 	 */
 	public void addCardToDeckTop(Card card)
@@ -50,6 +53,7 @@ public class Deck
 
 	/**
 	 * Adds a card face down to the *bottom* of the deck.
+	 * 
 	 * @param card The card to add to the bottom of the deck.
 	 */
 	public void addCardToDeckBottom(Card card)
@@ -63,7 +67,8 @@ public class Deck
 
 	/**
 	 * Adds *multiple* cards face down to the *top* of the deck
-	 * @param c The collection of cards to add to the bottom of the deck
+	 * 
+	 * @param c The collection of cards to add to the top of the deck
 	 */
 	public void addCardsToDeckTop(Collection c)
 	{
@@ -73,6 +78,7 @@ public class Deck
 
 	/**
 	 * Adds *multiple* cards face down to the *bottom* of the deck
+	 * 
 	 * @param c THe collection of cards to add to the bottom of the deck
 	 */
 	public void addCardsToDeckBottom(Collection c)
@@ -82,19 +88,9 @@ public class Deck
 	}
 
 	/**
-	 * Get every card from this deck (removing them from this deck).
-	 * @return Every card from this deck
-	 */
-	public ArrayList<Card> takeAllCards()
-	{
-		ArrayList cards = new ArrayList<Card>(_cards);
-		_cards.clear();
-		_sizeOfDeck = 0;
-		return cards;
-	}
-
-	/**
-	 * Adds a card at a random point in the deck.
+	 * Adds a card at a random point in the deck, if all cards are added in this
+	 * fashion all cards will effectively be shuffled.
+	 *
 	 * @param card The card to add into the deck.
 	 */
 	public void addCardToDeckRandomly(Card card)
@@ -106,8 +102,12 @@ public class Deck
 		}
 	}
 
+	
+	// "Taking cards from the deck" Methods
+
 	/**
 	 * Remove the card on top of the deck.
+	 * 
 	 * @return The card from the top of the deck.
 	 */
 	public Card takeCardFromTop()
@@ -118,6 +118,7 @@ public class Deck
 
 	/**
 	 * Remove the card from the bottom of the deck (you sly dog).
+	 * 
 	 * @return The card form the bottom of the deck.
 	 */
 	public Card takeCardFromBottom()
@@ -128,6 +129,7 @@ public class Deck
 
 	/**
 	 * Returns but does not remove the *top* card of the deck.
+	 * 
 	 * @return The top card of the deck
 	 */
 	public Card lookAtTopCard()
@@ -137,6 +139,7 @@ public class Deck
 
 	/**
 	 * Returns but does not remove the *bottom* card of the deck
+	 * 
 	 * @return The bottom card of the deck
 	 */
 	public Card lookAtBottomCard()
@@ -145,8 +148,22 @@ public class Deck
 	}
 
 	/**
+	 * Get every card from this deck (removing them from this deck).
+	 *
+	 * @return Every card from this deck
+	 */
+	public ArrayList<Card> takeAllCards()
+	{
+		ArrayList cards = new ArrayList<Card>(_cards);
+		_cards.clear();
+		_sizeOfDeck = 0;
+		return cards;
+	}
+
+	/**
 	 * Takes the specified number of cards from the top of the current deck and
 	 * puts them in a new deck in the same order.
+	 *
 	 * @param depth The number of cards to take
 	 * @return The deck with the number of cards requested
 	 */
@@ -165,12 +182,16 @@ public class Deck
 
 	/**
 	 * Takes half the deck, taking the majority if there is a odd number of cards.
+	 * 
 	 * @return The top half of the deck.
 	 */
 	public Deck halfDeck()
 	{
 		return cutDeck((int) Math.ceil(_sizeOfDeck/2));
 	}
+
+
+	// Other Deck Methods
 
 	/**
 	 * Shuffles the deck of cards into a new unguessable order.
@@ -191,6 +212,7 @@ public class Deck
 
 	/**
 	 * Determines whether the deck has no cards
+	 *
 	 * @return True if there are no cards left in the deck
 	 */
 	public boolean isEmpty()
@@ -200,10 +222,19 @@ public class Deck
 
 	/**
 	 * Get the string representation of this deck
+	 * 
 	 * @return A representation of every card in the deck
 	 */
 	public String toString()
 	{
 		return _cards.toString();
 	}
+
+
+	// Instance Variables
+
+	/** The cards in this deck */
+	private LinkedList<Card> _cards;
+	/** The number of cards in this deck */
+	private int _sizeOfDeck;
 }

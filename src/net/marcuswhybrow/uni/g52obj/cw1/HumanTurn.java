@@ -7,11 +7,17 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
+ * Extends the Turn Behaviour class and allows a human to choose from a list
+ * of values the property which they wish to compare against the competing
+ * players values.
  *
- * @author marcus
+ * @author Marcus Whybrow
  */
 public class HumanTurn extends Turn
 {
+	// Public Methods
+	
+
 	/**
 	 * Displays to the user the choices for the current card, and prompts the
 	 * user for a choice.
@@ -62,4 +68,12 @@ public class HumanTurn extends Turn
 			}
 		}
 	}
+
+
+	// Private Methods
+	// This class has no private methods
+
+
+	// Instance Variables
+	// This class is a behaviour and thus has no instance variables
 }
