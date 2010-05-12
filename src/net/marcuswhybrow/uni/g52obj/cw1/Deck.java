@@ -160,36 +160,6 @@ public class Deck
 		return cards;
 	}
 
-	/**
-	 * Takes the specified number of cards from the top of the current deck and
-	 * puts them in a new deck in the same order.
-	 *
-	 * @param depth The number of cards to take
-	 * @return The deck with the number of cards requested
-	 */
-	public Deck cutDeck(int depth)
-	{
-		Deck newDeck = new Deck();
-
-		for(; depth > 0; depth--)
-		{
-			newDeck.addCardToDeckBottom(_cards.pollFirst());
-			_sizeOfDeck--;
-		}
-
-		return newDeck;
-	}
-
-	/**
-	 * Takes half the deck, taking the majority if there is a odd number of cards.
-	 * 
-	 * @return The top half of the deck.
-	 */
-	public Deck halfDeck()
-	{
-		return cutDeck((int) Math.ceil(_sizeOfDeck/2));
-	}
-
 
 	// Other Deck Methods
 
@@ -225,6 +195,7 @@ public class Deck
 	 * 
 	 * @return A representation of every card in the deck
 	 */
+	@Override
 	public String toString()
 	{
 		return _cards.toString();

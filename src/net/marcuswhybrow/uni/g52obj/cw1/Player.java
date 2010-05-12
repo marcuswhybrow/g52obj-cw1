@@ -6,7 +6,7 @@ package net.marcuswhybrow.uni.g52obj.cw1;
  *
  * @author Marcus Whybrow
  */
-public class Player implements ITurn
+public class Player
 {
 	// Public Methods
 
