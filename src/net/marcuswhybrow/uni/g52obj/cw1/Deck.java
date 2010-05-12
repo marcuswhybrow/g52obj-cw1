@@ -70,7 +70,7 @@ public class Deck
 	 * 
 	 * @param c The collection of cards to add to the top of the deck
 	 */
-	public void addCardsToDeckTop(Collection c)
+	public void addCardsToDeckTop(Collection<Card> c)
 	{
 		_cards.addAll(0, c);
 		_sizeOfDeck += c.size();
@@ -81,7 +81,7 @@ public class Deck
 	 * 
 	 * @param c THe collection of cards to add to the bottom of the deck
 	 */
-	public void addCardsToDeckBottom(Collection c)
+	public void addCardsToDeckBottom(Collection<Card> c)
 	{
 		_cards.addAll(c);
 		_sizeOfDeck += c.size();
@@ -154,7 +154,7 @@ public class Deck
 	 */
 	public ArrayList<Card> takeAllCards()
 	{
-		ArrayList cards = new ArrayList<Card>(_cards);
+		ArrayList<Card> cards = new ArrayList<Card>(_cards);
 		_cards.clear();
 		_sizeOfDeck = 0;
 		return cards;
