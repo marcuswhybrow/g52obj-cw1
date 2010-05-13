@@ -31,8 +31,8 @@ public class Game
 		_cardsInPlay = new HashMap<Player, Card>();
 
 		// Players play in addition order.
-		// NOTE: player should be added externally, that is not from within the
-		// Game class, however I was unsure wether we had control over files
+		// NOTE: players should be added externally, that is not from within the
+		// Game class, however I was unsure weather we had control over files
 		// provided initially in the coursework.
 		this.addPlayer(new Player("Computer One", new ComputerTurnBehaviour()));
 		this.addPlayer(new Player("Computer Two", new ComputerTurnBehaviour()));
