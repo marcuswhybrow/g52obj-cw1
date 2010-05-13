@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author Marcus Whybrow
  */
-public class HumanTurn extends Turn
+public final class HumanTurnBehaviour implements ITurnBehaviour
 {
 	// Public Methods
 	
@@ -36,7 +36,7 @@ public class HumanTurn extends Turn
 		// Get a choice from the user
 		while(true)
 		{
-			System.out.print("Please select a category to compete with: ");
+			System.out.print("\nPlease select a category to compete with: ");
 
 			try
 			{

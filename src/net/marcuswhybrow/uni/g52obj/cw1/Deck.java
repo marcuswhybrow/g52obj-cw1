@@ -201,6 +201,16 @@ public class Deck
 		return _cards.toString();
 	}
 
+	public String privateRepresentation()
+	{
+		String output = "";
+
+		for(Card card : _cards)
+			output += "[]";
+
+		return output;
+	}
+
 
 	// Instance Variables
 

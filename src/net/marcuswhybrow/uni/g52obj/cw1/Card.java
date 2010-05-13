@@ -94,7 +94,7 @@ public class Card
 	{
 		int choiceNumber = 1;
 
-		System.out.println("Top Card is " + _title + ":\n");
+		System.out.println("Top Card is \"" + _title + "\":\n");
 		System.out.println("Categories:");
 
 		for(Property property : _properties.values())

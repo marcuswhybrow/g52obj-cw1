@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author Marcus Whybrow
  */
-public class ComputerTurn extends Turn
+public final class ComputerTurnBehaviour implements ITurnBehaviour
 {
 	// Public Methods
 
@@ -59,9 +59,6 @@ public class ComputerTurn extends Turn
 			if(bestProperty == null || value > _potential.get(bestProperty.getName()))
 				bestProperty = property;
 		}
-
-		System.out.println("    " + _scales.toString());
-		System.out.println("    " + _potential.toString());
 
 		return bestProperty;
 	}

@@ -2,7 +2,8 @@
 package net.marcuswhybrow.uni.g52obj.cw1;
 
 /**
- * An abstract base class for players with the Top Trumps game
+ * Represents players within the Top Tumps game. Encapsulates the players name,
+ * deck and turn behaviour.
  *
  * @author Marcus Whybrow
  */
@@ -14,11 +15,11 @@ public class Player
 	 * Crates a player with an empty deck and the given name.
 	 * @param name The name for the new player
 	 */
-	public Player(String name, Turn turn)
+	public Player(String name, ITurnBehaviour turn)
 	{
 		_deck = new Deck();
 		_name = name;
-		_turn = turn;
+		_turnBehaviour = turn;
 	}
 
 	/**
@@ -26,9 +27,9 @@ public class Player
 	 *
 	 * @param turn An instance of the turn behaviour to use
 	 */
-	public void setTurn(Turn turn)
+	public void setTurn(ITurnBehaviour turn)
 	{
-		_turn = turn;
+		_turnBehaviour = turn;
 	}
 
 	/**
@@ -36,9 +37,9 @@ public class Player
 	 *
 	 * @return The behaviour which used by this player
 	 */
-	public Turn getTurn()
+	public ITurnBehaviour getTurn()
 	{
-		return _turn;
+		return _turnBehaviour;
 	}
 
 
@@ -75,5 +76,5 @@ public class Player
 	/** The name of the player to represent them within the game */
 	private String _name;
 	/** The turn behaviour that this player should employ **/
-	private Turn _turn;
+	private ITurnBehaviour _turnBehaviour;
 }

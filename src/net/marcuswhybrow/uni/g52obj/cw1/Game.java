@@ -34,8 +34,8 @@ public class Game
 		// NOTE: player should be added externally, that is not from within the
 		// Game class, however I was unsure wether we had control over files
 		// provided initially in the coursework.
-		this.addPlayer(new Player("Human", new HumanTurn()));
-		this.addPlayer(new Player("Computer", new ComputerTurn()));
+		this.addPlayer(new Player("Computer One", new ComputerTurnBehaviour()));
+		this.addPlayer(new Player("Computer Two", new ComputerTurnBehaviour()));
 
 		if(_numPlayers < 2)
 			System.err.println("A game must have at least 2 players");
@@ -74,6 +74,8 @@ public class Game
 
 				// The leading player takes their turn (choosing a property)
 				property = _currentPlayer.getTurn().takeTurn(_currentPlayer.getDeck().lookAtTopCard());
+
+				System.out.println("\n" + _currentPlayer + " has selected category \"" + property.getName() + "\"");
 
 				// Evaluate all players cards, winning or drawing cards end up
 				// "cards in play" and losing cards end up in the shared deck.
@@ -121,8 +123,8 @@ public class Game
 						winningHand = (Map.Entry) _cardsInPlay.entrySet().toArray()[0];
 						_currentPlayer = (Player) winningHand.getKey();
 						winningCard = (Card) winningHand.getValue();
-						System.out.println("\n>> " + _currentPlayer + " has won this round with card "
-								+ winningCard + " which scored "
+						System.out.println(_currentPlayer + " has won this round with card \""
+								+ winningCard + "\" which scored "
 								+ winningCard.getProperty(property.getName()).getValue()
 								+ " in \"" + property.getName() + "\".");
 
@@ -134,7 +136,7 @@ public class Game
 						continue;
 					default:
 						// Multiple cards drew, the same player has another turn.
-						System.out.println("\n>> Players have drawn on \"" + property.getName() + "\", playing next card.");
+						System.out.println("Players have drawn on \"" + property.getName() + "\", playing next card.");
 						_deck.addCardsToDeckTop(_cardsInPlay.values());
 						this.printDecks();
 						this.askPlayersToLeave();
@@ -143,7 +145,7 @@ public class Game
 			}
 
 			// One one player is left
-			System.out.println("\n>> " + _players.get(0) + " has won the game with card "
+			System.out.println(_players.get(0) + " has won the game with card "
 					+ winningCard + " which scored "
 					+ winningCard.getProperty(property.getName()).getValue()
 					+ " in " + property + ".");
@@ -203,14 +205,29 @@ public class Game
 	{
 		System.out.println("\n--------------------------------------------");
 
-		for(int i = _players.size(); i > 0; i--)
+		int length, maxLength = 0;
+		for(Player player : _players)
 		{
-			Player player = _players.get(i-1);
-
-			System.out.println(player + "(" + player.getDeck().getSize() + "): " + player.getDeck());
+			length = player.toString().length() + Integer.toString(player.getDeck().getSize()).length() + 4;
+			if (length > maxLength)
+				maxLength = length;
 		}
 
-		System.out.println("deck(" + _deck.getSize() + "): " + _deck);
+		String line;
+		for(Player player : _players)
+		{
+			line = player + "(" + player.getDeck().getSize() + "): ";
+			System.out.print(line);
+			for(int i = maxLength - line.length(); i > 0; i--)
+				System.out.print(" ");
+			System.out.println(player.getDeck().privateRepresentation());
+		}
+
+		line = "deck(" + _deck.getSize() + "): ";
+		System.out.print(line);
+		for(int i = maxLength - line.length(); i > 0; i--)
+			System.out.print(" ");
+		System.out.println(_deck.privateRepresentation());
 
 		System.out.println("--------------------------------------------\n");
 	}
