@@ -6,3 +6,5 @@
 build/.*$
 nbproject/.*$
 .*\.DS_Store$
+
+dist/.*$
